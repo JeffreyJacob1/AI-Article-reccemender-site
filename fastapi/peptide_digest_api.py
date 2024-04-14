@@ -7,7 +7,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8050"],  # Allow your Dash app's origin
+    allow_origins=["http://0.0.0.0:8050"],  # Allow your Dash app's origin
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
@@ -41,7 +41,8 @@ def retrieve_article(doi=None, url=None, pii=None):
         else:
             url = "https://www." + url
 
-    conn = sqlite3.connect("../data/articles.db")
+    conn = sqlite3.connect("/usr/src/app/data/articles.db")
+
     c = conn.cursor()
     if doi:
         c.execute("SELECT * FROM articles WHERE doi=?", (doi,))
@@ -91,7 +92,8 @@ async def retrieve(doi: str = None, url: str = None, pii: str = None):
 
 @app.get("/search/")
 async def search_papers(term: str, sort: str = "new_to_old"):
-    conn = sqlite3.connect("articles.db")
+    conn = sqlite3.connect("/usr/src/app/data/articles.db")
+
     c = conn.cursor()
 
     # Determine the ORDER BY clause based on the sort parameter

@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  fastapi-app:
+    image: fastapi-app-image:latest  # Use a specific tag, typically 'latest' or a version number
+    build:
+      context: ./fastapi
+      # dockerfile: Dockerfile is optional if the file is named Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/usr/src/app/data
+
+  dash-app:
+    image: dash-app-image:latest
+    build:
+      context: ./dash
+    ports:
+      - "8050:8050"

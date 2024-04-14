@@ -147,7 +147,7 @@ def update_article_info(n_clicks, input_value, article_type):
         "doi" if article_type == "DOI" else "url" if article_type == "URL" else "pii"
     )
     response = requests.get(
-        f"http://127.0.0.1:8000/retrieve/?{query_param}={input_value}"
+        f"http://fastapi-app:8000/retrieve/?{query_param}={input_value}"
     )
 
     if response.status_code == 200:
@@ -216,7 +216,7 @@ def get_article_info(input_doi):
     -------
     html.Div: A Div containing the detailed information about the article.
     """
-    response = requests.get(f"http://127.0.0.1:8000/retrieve/?doi={input_doi}")
+    response = requests.get(f"http://fastapi-app:8000/retrieve/?doi={input_doi}")
 
     if response.status_code == 200:
         article_info = response.json()

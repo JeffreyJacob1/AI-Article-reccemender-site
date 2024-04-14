@@ -100,7 +100,7 @@ def update_db_search_results(n_clicks, search_term, sort_order):
         raise PreventUpdate
 
     response = requests.get(
-        f"http://127.0.0.1:8000/search/?term={search_term}&sort={sort_order}"
+        f"http://fastapi-app:8000/search/?term={search_term}&sort={sort_order}"
     )
     if response.status_code == 200:
         articles = response.json()
