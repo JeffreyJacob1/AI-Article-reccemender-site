@@ -169,6 +169,16 @@ def update_article_info(n_clicks, input_value, article_type):
             ],
             className="article-detailed-info",
         )
+        feedback_tab = dbc.Tab(
+    [
+        dbc.Input(id="name-input", placeholder="Enter your name", type="text"),
+        dbc.Input(id="doi-input", placeholder="Enter the article DOI", type="text"),
+        dbc.Textarea(id="feedback-input", placeholder="Enter your feedback", rows=3),
+        dbc.Button("Submit Feedback", id="submit-feedback-btn", color="primary", className="mt-2"),
+        html.Div(id="feedback-message")
+    ],
+    label="Submit Feedback"
+)
 
         # Tabbed interface
         tabbed_interface = dbc.Tabs(
@@ -191,6 +201,7 @@ def update_article_info(n_clicks, input_value, article_type):
                     dcc.Markdown(f"**Metadata:**\n{article_info['model_metadata']}"),
                     label="Metadata",
                 ),
+                feedback_tab
             ],
             className="article-tabs",
         )
@@ -237,7 +248,16 @@ def get_article_info(input_doi):
             ],
             className="article-detailed-info",
         )
-
+        feedback_tab = dbc.Tab(
+    [
+        dbc.Input(id="name-input", placeholder="Enter your name", type="text"),
+        dbc.Input(id="doi-input", placeholder="Enter the article DOI", type="text"),
+        dbc.Textarea(id="feedback-input", placeholder="Enter your feedback", rows=3),
+        dbc.Button("Submit Feedback", id="submit-feedback-btn", color="primary", className="mt-2"),
+        html.Div(id="feedback-message")
+    ],
+    label="Submit Feedback"
+)
         # Tabbed interface
         tabbed_interface = dbc.Tabs(
             [
@@ -259,6 +279,7 @@ def get_article_info(input_doi):
                     dcc.Markdown(f"**Metadata:**\n{article_info['model_metadata']}"),
                     label="Metadata",
                 ),
+                feedback_tab
             ],
             className="article-tabs",
         )
@@ -270,3 +291,26 @@ def get_article_info(input_doi):
             "Article not found or error in fetching information.",
             style={"color": custom_colors["dark-blue"]},
         )
+
+
+@app.callback(
+    Output("feedback-message", "children"),
+    [Input("submit-feedback-btn", "n_clicks")],
+    [State("name-input", "value"), State("doi-input", "value"), State("feedback-input", "value")]
+)
+def submit_feedback(n_clicks, name, doi, feedback):
+    if n_clicks is None:
+        raise PreventUpdate
+
+    if name and doi and feedback:
+        try:
+            with open("/usr/src/app/data/feedback.csv", "a") as f:
+                f.write(f"{name},{feedback},{doi}\n")
+                f.flush()  # Flush the file buffer
+                print("Feedback data written to file")  # Print a message to indicate success
+            return "Feedback submitted successfully! 22"
+        except Exception as e:
+            print(f"Error writing feedback data to file: {str(e)}")  # Print any error that occurs
+            return "An error occurred while submitting the feedback."
+    else:
+        return "Please enter your name, the article DOI, and feedback."

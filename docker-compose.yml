@@ -16,3 +16,7 @@ services:
       context: ./dash
     ports:
       - "8050:8050"
+    volumes:
+      - ./data:/usr/src/app/data
+
+
