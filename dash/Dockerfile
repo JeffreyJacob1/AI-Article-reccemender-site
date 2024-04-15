@@ -21,5 +21,5 @@ USER appuser
 # Make port 8050 available to the world outside this container
 EXPOSE 8050
 
-# Run app.py when the container launches
-CMD ["python", "index.py"]
+# Run the command to start the Dash app with Gunicorn
+CMD ["gunicorn", "-b", "0.0.0.0:8050", "index:server"]

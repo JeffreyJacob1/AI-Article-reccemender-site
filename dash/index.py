@@ -1,8 +1,7 @@
 from dash import dcc, html
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
-
-from app import app
+from app import app, server  # Update this line to import the server object
 from apps import home, about, db_search, navigation, search
 
 url_content_layout = dbc.Container(
@@ -26,7 +25,6 @@ app.validation_layout = html.Div(
     ]
 )
 
-
 # Update the page content based on the URL
 @app.callback(
     Output("page-content", "children"),
@@ -44,7 +42,4 @@ def display_page(pathname):
     else:
         return home.layout
 
-
-# Run the Dash app
-if __name__ == "__main__":
-    app.run_server(debug=True, host='0.0.0.0', port=8050)
+# Remove the app.run_server() line
