@@ -1,10 +1,8 @@
 # dash-site
 
-## Todo
--db is currently full of entries mssing model outputs
-- make color merck color
-- url links
-- click on doi in db search to search
-- misscelaneous improvments
-- user accounts, ouath
+to runn the application in the same dir as docker-compose run 
+
+docker-compose up -d     
+
+this will launch the fastapi and dash site locally on 0.0.0.0 and expose the ports needed, the application can then be accsessed locally. check docker desktop container for the terminal outputs.
   
