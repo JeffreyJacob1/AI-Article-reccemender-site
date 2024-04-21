@@ -155,9 +155,8 @@ def update_article_info(n_clicks, input_value, article_type):
 
         detailed_info = html.Div(
             [
-                html.H5(
-                    "Article Information:", style={"color": custom_colors["dark-blue"]}
-                ),
+                html.H5("Article Information:", style={"color": custom_colors["dark-blue"]}),
+                html.H5(f"DOI: {article_info['doi']}", id="displayed-doi", style={"color": custom_colors["dark-blue"]}),
                 html.P(
                     html.A(
                         article_info["title"],
@@ -169,16 +168,17 @@ def update_article_info(n_clicks, input_value, article_type):
             ],
             className="article-detailed-info",
         )
+
         feedback_tab = dbc.Tab(
-    [
-        dbc.Input(id="name-input", placeholder="Enter your name", type="text"),
-        dbc.Input(id="doi-input", placeholder="Enter the article DOI", type="text"),
-        dbc.Textarea(id="feedback-input", placeholder="Enter your feedback", rows=3),
-        dbc.Button("Submit Feedback", id="submit-feedback-btn", color="primary", className="mt-2"),
-        html.Div(id="feedback-message")
-    ],
-    label="Submit Feedback"
-)
+            [
+                dbc.Input(id="name-input", placeholder="Enter your name", type="text"),
+                dbc.Input(id="doi-input", value="", placeholder="Enter the article DOI", type="text"),
+                dbc.Textarea(id="feedback-input", placeholder="Enter your feedback", rows=3),
+                dbc.Button("Submit Feedback", id="submit-feedback-btn", color="primary", className="mt-2"),
+                html.Div(id="feedback-message")
+            ],
+            label="Submit Feedback"
+        )
 
         # Tabbed interface
         tabbed_interface = dbc.Tabs(
@@ -218,25 +218,22 @@ def update_article_info(n_clicks, input_value, article_type):
 def get_article_info(input_doi):
     """
     This function retrieves the article information based on the DOI.
-
+    
     Parameters:
     ----------
     input_doi (str): The DOI of the article.
-
+    
     Returns:
     -------
     html.Div: A Div containing the detailed information about the article.
     """
     response = requests.get(f"http://fastapi-app:8000/retrieve/?doi={input_doi}")
-
     if response.status_code == 200:
         article_info = response.json()
-
         detailed_info = html.Div(
             [
-                html.H5(
-                    "Article Information:", style={"color": custom_colors["dark-blue"]}
-                ),
+                html.H5("Article Information:", style={"color": custom_colors["dark-blue"]}),
+                html.H5(f"DOI: {article_info['doi']}", id="displayed-doi", style={"color": custom_colors["dark-blue"]}),
                 html.P(
                     html.A(
                         article_info["title"],
@@ -248,16 +245,18 @@ def get_article_info(input_doi):
             ],
             className="article-detailed-info",
         )
+        
         feedback_tab = dbc.Tab(
-    [
-        dbc.Input(id="name-input", placeholder="Enter your name", type="text"),
-        dbc.Input(id="doi-input", placeholder="Enter the article DOI", type="text"),
-        dbc.Textarea(id="feedback-input", placeholder="Enter your feedback", rows=3),
-        dbc.Button("Submit Feedback", id="submit-feedback-btn", color="primary", className="mt-2"),
-        html.Div(id="feedback-message")
-    ],
-    label="Submit Feedback"
-)
+            [
+                dbc.Input(id="name-input", placeholder="Enter your name", type="text"),
+                dbc.Input(id="doi-input", value="", placeholder="Enter the article DOI", type="text"),
+                dbc.Textarea(id="feedback-input", placeholder="Enter your feedback", rows=3),
+                dbc.Button("Submit Feedback", id="submit-feedback-btn", color="primary", className="mt-2"),
+                html.Div(id="feedback-message")
+            ],
+            label="Submit Feedback"
+        )
+        
         # Tabbed interface
         tabbed_interface = dbc.Tabs(
             [
@@ -283,7 +282,7 @@ def get_article_info(input_doi):
             ],
             className="article-tabs",
         )
-
+        
         # Combine detailed info and tabs in a single Div to avoid list of lists
         return html.Div([detailed_info, tabbed_interface])
     else:
@@ -308,9 +307,20 @@ def submit_feedback(n_clicks, name, doi, feedback):
                 f.write(f"{name},{feedback},{doi}\n")
                 f.flush()  # Flush the file buffer
                 print("Feedback data written to file")  # Print a message to indicate success
-            return "Feedback submitted successfully! 22"
+            return "Feedback submitted successfully!"
         except Exception as e:
             print(f"Error writing feedback data to file: {str(e)}")  # Print any error that occurs
             return "An error occurred while submitting the feedback."
     else:
         return "Please enter your name, the article DOI, and feedback."
+        
+@app.callback(
+    Output("doi-input", "value"),
+    [Input("displayed-doi", "children")]
+)
+def update_doi_input(displayed_doi):
+    if displayed_doi:
+        doi = displayed_doi.split(': ')[1]
+        return doi
+    else:
+        return ""
