@@ -1,5 +1,5 @@
 # dash-site
-
+Application made for Merck, end to end website AI Database for article reccemendation
 to runn the application in the same dir as docker-compose run 
 
 docker-compose up -d     
