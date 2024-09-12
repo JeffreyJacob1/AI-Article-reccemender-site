@@ -1,6 +1,8 @@
-# dash-site
+# Autonomous ai artucle reviewer and reccemender
 Application made for Merck, end to end website AI Database for article reccemendation
-to runn the application in the same dir as docker-compose run 
+end to end web app that scrapes the internet for new scientific research, recommends papers to employees based on their interests, and generates readership stats, powered by a customized LLM.
+includes sql db, fast api, web scraper, llm integration and frontend
+to run the application in the same dir as docker-compose run 
 
 docker-compose up -d     
 
