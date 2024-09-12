@@ -1,5 +1,5 @@
-# Autonomous ai artucle reviewer and reccemender
-Application made for Merck, end to end website AI Database for article reccemendation
+# Autonomous Ai article reviewer and recomender
+Application made for Merck, end to end website AI Database for article recomendation
 end to end web app that scrapes the internet for new scientific research, recommends papers to employees based on their interests, and generates readership stats, powered by a customized LLM.
 
 Includes sql db, fast api, web scraper, llm integration and frontend
